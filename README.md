@@ -21,3 +21,7 @@
         - [ ] Implement: Implement the code based on the option the user gave to choose the desired programming language
         - [ ] Review: Review and validate the code by testing out inputs and edge cases
         - [ ] Evaluate: State teh time complexity of the code that is written
+
+## Fonts Used
+- [ ] Outfit - Used for regular UI
+- [ ] Source Code Pro Black - Used for code blocks

@@ -25,3 +25,11 @@
 ## Fonts Used
 - [ ] Outfit - Used for regular UI
 - [ ] Source Code Pro Black - Used for code blocks
+
+## Color Scheme
+- [ ] #06eff4 (Turquiose)
+- [ ] #f331c4 (Magenta)
+- [ ] Black Background
+
+## Logo
+- [x] Logo

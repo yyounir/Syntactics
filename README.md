@@ -12,4 +12,6 @@
     - [ ] The AI would use the UMPIRE framework to help the user what the problem is talking about, what time/space complexity it requires, and how to approach the problem.
         - [ ] Understand: The AI would see what the input is, what the output is, core logic, and the possible edge cases
         - [ ] Plan: Plan out what the code would be in plain english
-        - [ ] Implement: Implement the code
+        - [ ] Implement: Implement the code based on the option the user gave to choose the desired programming language
+        - [ ] Review: Review and validate the code by testing out outputs and edge cases
+        - [ ] Evaluate: State teh time complexity of the code that is written

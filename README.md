@@ -1,4 +1,4 @@
-# Syntactics
+# 💻 Syntactics
 
 ## Features
 ### Syntax Mode
@@ -20,16 +20,19 @@
         - [ ] Plan: Plan out what the code would be in plain english
         - [ ] Implement: Implement the code based on the option the user gave to choose the desired programming language
         - [ ] Review: Review and validate the code by testing out inputs and edge cases
-        - [ ] Evaluate: State teh time complexity of the code that is written
+        - [ ] Evaluate: State the time complexity of the code that is written
 
 ## Fonts Used
 - [ ] Outfit - Used for regular UI
 - [ ] Source Code Pro Black - Used for code blocks
 
 ## Color Scheme
-- [ ] #06eff4 (Turquiose)
-- [ ] #f331c4 (Magenta)
+- [ ] Neon Green
+- [ ] Violet Purple
 - [ ] Black Background
 
-## Logo
-- [x] Logo
+## Prompt
+I want to build an an app that would help people in programming and understand their coding workflow as they code. 
+
+There are three main features in this app, first is the Syntax Mode, where the user would first select a programming language that they would paste, and paste the code in. Now the AI would provide a response back, which describes the time complexity of the code indicating each line of the code, the method they used, and 
+

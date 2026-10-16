@@ -11,7 +11,8 @@
     - [ ] Offer detailed feedback on improving the user's code, such as how its being coded, helpful comments, and suggesting on a different data strucutre if applicible
 
 ### Guided Mode
-- [ ] Users can ask AI to learn concepts, syntaxes, data structures, and algorithms in this mode, and the AI would guide the user to learn the concept
+- [ ] Users can ask AI to learn concepts, syntaxes, data structures, and algorithms in this mode with any programming language, and the AI would guide the user to learn the concept
+- [ ] 
 
 ### LeetCode Mode
 - [ ] Users can paste in any problem, select a programming language that the AI would respond with, give a leetcode problem, or a leetcode problem number, and the AI would return a response
@@ -22,14 +23,21 @@
         - [ ] Review: Review and validate the code by testing out inputs and edge cases
         - [ ] Evaluate: State the time complexity of the code that is written
 
+## UX Actions
+- The sidebar will be used for switching between sytnax mode, guided mode, and leetcode mode
+
 ## Fonts Used
 - [ ] Outfit - Used for regular UI
 - [ ] Source Code Pro Black - Used for code blocks
 
 ## Color Scheme
-- [ ] Neon Green
-- [ ] Violet Purple
+- [ ] Neon Green (Foreground)
+- [ ] Violet Purple (Foreground)
+- [ ] White
 - [ ] Black Background
+
+## Design
+- "Developer-friendly" UI
 
 ## Prompt
 I want to build an an app that would help people in programming and understand their coding workflow as they code. 

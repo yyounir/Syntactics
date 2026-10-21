@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syntactics — Technical Spec: LeetCode Mode</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --panel: #171a23;
+    --panel-2: #1e2230;
+    --panel-3: #262b3d;
+    --border: #2a2f3f;
+    --text: #e8e9ee;
+    --muted: #9aa0b4;
+    --accent: #7c9eff;
+    --accent-2: #67d99a;
+    --accent-3: #ffb15c;
+    --danger: #ff7a7a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 48px 24px 96px; }
+  h1 { font-size: 2rem; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); margin-top: 0; margin-bottom: 40px; font-size: 1.05rem; }
+  h2 {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    margin-top: 48px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+  h3 { font-size: 0.95rem; color: var(--text); margin: 0 0 6px; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+  .kernel {
+    background: linear-gradient(135deg, rgba(124,158,255,0.12), rgba(103,217,154,0.08));
+    border: 1px solid rgba(124,158,255,0.3);
+    border-radius: 12px;
+    padding: 24px;
+    font-size: 1.05rem;
+  }
+  code, pre {
+    font-family: "Source Code Pro", "SFMono-Regular", Consolas, Menlo, monospace;
+  }
+  code {
+    background: var(--panel-2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+  pre {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  pre code { background: none; padding: 0; }
+
+  /* Architecture diagram (CSS, no external deps) */
+  .arch {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 10px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 20px;
+    flex-wrap: wrap;
+  }
+  .node {
+    flex: 1;
+    min-width: 150px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    position: relative;
+  }
+  .node.highlight { border-color: rgba(124,158,255,0.5); background: var(--panel-3); }
+  .node .label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .node .value { font-weight: 600; font-size: 0.9rem; }
+  .node .sub { font-size: 0.75rem; color: var(--muted); margin-top: 6px; font-weight: 400; }
+  .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 1.4rem;
+    min-width: 20px;
+  }
+  @media (max-width: 760px) {
+    .arch { flex-direction: column; }
+    .arrow { transform: rotate(90deg); }
+  }
+
+  /* Journey stepper */
+  .stepper-nav {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .step-btn {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .step-btn.active { background: var(--accent); color: #0f1117; border-color: var(--accent); font-weight: 600; }
+  .step-panel { display: none; }
+  .step-panel.active { display: block; }
+  .step-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+  }
+  .step-card .tagline { color: var(--accent-2); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+
+  /* Visualization mock */
+  .viz-mock {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    padding: 20px;
+    background: var(--panel-2);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .viz-box {
+    width: 46px; height: 46px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--panel-3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: monospace;
+    font-weight: 600;
+  }
+  .viz-box.active { border-color: var(--accent-2); background: rgba(103,217,154,0.15); color: var(--accent-2); }
+  .viz-caption { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 10px; }
+
+  /* Reveal / accordion */
+  details {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  summary {
+    cursor: pointer;
+    padding: 14px 18px;
+    font-weight: 600;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--muted); font-size: 1.2rem; }
+  details[open] summary::after { content: "−"; }
+  details .content { padding: 0 18px 16px; color: var(--muted); }
+  details .content code { color: var(--text); }
+  .prd-ref { font-size: 0.75rem; color: var(--accent); white-space: nowrap; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.04em; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .fail-list { list-style: none; padding: 0; margin: 0; }
+  .fail-list li { padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .fail-list li:last-child { border-bottom: none; }
+  .fail-list .what { color: var(--danger); font-weight: 600; }
+  .fail-list .arrow-sm { color: var(--muted); margin: 0 6px; }
+
+  .simplify-list { list-style: none; padding: 0; margin: 0; }
+  .simplify-list li { padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .simplify-list li:last-child { border-bottom: none; }
+  .simplify-list .built { color: var(--accent-2); font-weight: 600; }
+
+  footer { margin-top: 64px; color: var(--muted); font-size: 0.85rem; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Syntactics — LeetCode Mode</h1>
+  <p class="subtitle">Technical blueprint: Next.js + TypeScript, Gemini for the AI reasoning, a small set of hand-built components for the visualization, Neon + Prisma for saved conversations.</p>
+
+  <h2>How This Works, In Plain Language</h2>
+  <div class="card">
+    <p>It's one Next.js project — no separate frontend and backend service to wire together. The same project serves the pages you see and runs the server-side code that talks to Gemini and the database.</p>
+    <p>When you submit a problem, the page calls a backend route inside that same project. That route asks Gemini for a specific shape of answer — not freeform text, but structured data: the UMPIRE breakdown, the complexity reasoning, the concepts involved, and a list of <em>steps</em> describing how the data structure changes. Gemini doesn't draw a picture — it fills in that list. Your own React components draw the boxes for whichever step is active, and Previous/Next buttons step through them. That's how the visualization works for <em>any</em> problem, without image generation.</p>
+    <p>Saving a conversation writes it to Neon (a hosted Postgres database) through Prisma — a tool that lets the app read and write that database using TypeScript instead of raw SQL.</p>
+  </div>
+
+  <h2>Architecture</h2>
+  <div class="arch">
+    <div class="node">
+      <div class="label">Browser</div>
+      <div class="value">Next.js pages</div>
+      <div class="sub">Sidebar, form, chat, visualization stepper</div>
+    </div>
+    <div class="arrow">&rarr;</div>
+    <div class="node highlight">
+      <div class="label">Same project</div>
+      <div class="value">Next.js API routes</div>
+      <div class="sub">/api/leetcode, /api/leetcode/chat, /api/conversations</div>
+    </div>
+    <div class="arrow">&rarr;</div>
+    <div class="node">
+      <div class="label">External</div>
+      <div class="value">Gemini API</div>
+      <div class="sub">UMPIRE + complexity + steps JSON</div>
+    </div>
+  </div>
+  <div class="arch" style="margin-top: 10px;">
+    <div class="node"></div>
+    <div class="arrow" style="min-width:0;"></div>
+    <div class="node highlight">
+      <div class="label">Same project</div>
+      <div class="value">Next.js API routes</div>
+    </div>
+    <div class="arrow">&rarr;</div>
+    <div class="node">
+      <div class="label">External</div>
+      <div class="value">Neon Postgres (via Prisma)</div>
+      <div class="sub">Saved conversations table</div>
+    </div>
+  </div>
+  <p class="viz-caption">Everything in the middle column is code the learner writes and deploys as one Vercel project.</p>
+
+  <h2>The Core Journey Through the System</h2>
+  <p style="color: var(--muted); font-size: 0.9rem; margin-top: -8px;">PRD ref: <code>prd.md &gt; The Core Journey</code>. Click a step.</p>
+  <div class="stepper-nav" id="stepper-nav"></div>
+  <div id="stepper-panels"></div>
+
+  <h2>The Unique Kernel, Built</h2>
+  <div class="kernel">
+    Gemini returns a <code>steps</code> array — each step says things like "array is <code>[4,2,7]</code>, comparing indices 0 and 1." A small, fixed set of React components (<code>ArrayView</code>, <code>LinkedListView</code>, <code>TreeView</code>, <code>RecursionView</code>) render whichever step is active, picked by a <code>type</code> field Gemini fills in. Previous/Next just moves between steps. This is why it generalizes to any problem without image generation.
+    <div class="viz-mock">
+      <div class="viz-box">4</div>
+      <div class="viz-box active">2</div>
+      <div class="viz-box active">7</div>
+      <div class="viz-box">1</div>
+    </div>
+    <div class="viz-caption">Step 2 of 5 — comparing indices 1 and 2 — rendered by <code>ArrayView</code> from Gemini's step data.</div>
+  </div>
+
+  <h2>Components</h2>
+
+  <details open>
+    <summary><span>Sidebar</span><span class="prd-ref">prd.md &gt; Screens and Layout</span></summary>
+    <div class="content">Mode list (LeetCode Mode active; Syntax/Guided grayed out), saved-conversations list (queried from Neon), light/dark toggle. File: <code>components/Sidebar.tsx</code>.</div>
+  </details>
+  <details>
+    <summary><span>LeetCodeForm</span><span class="prd-ref">prd.md &gt; Input and submission</span></summary>
+    <div class="content">Problem number/text input, language selector, guided/full-framework toggle, submit, loading indicator. File: <code>components/LeetCodeForm.tsx</code>.</div>
+  </details>
+  <details>
+    <summary><span>FullFrameworkView</span><span class="prd-ref">prd.md &gt; Full framework response</span></summary>
+    <div class="content">Renders UMPIRE breakdown, complexity + reasoning, concepts, and the <code>VisualizationStepper</code> from one Gemini response. File: <code>components/FullFrameworkView.tsx</code>.</div>
+  </details>
+  <details>
+    <summary><span>GuidedChat</span><span class="prd-ref">prd.md &gt; Guided response</span></summary>
+    <div class="content">Chat thread; sends/receives against <code>/api/leetcode/chat</code>; shows current UMPIRE stage; triggers the stepper only on request; has the Save button. File: <code>components/GuidedChat.tsx</code>.</div>
+  </details>
+  <details>
+    <summary><span>VisualizationStepper + sub-renderers</span><span class="prd-ref">scope.md &gt; The Unique Kernel</span></summary>
+    <div class="content">Takes the <code>steps</code> array; Previous/Next controls; dispatches to <code>ArrayView</code>, <code>LinkedListView</code>, <code>TreeView</code>, or <code>RecursionView</code> per step's <code>type</code>. Files: <code>components/visualization/*.tsx</code>.</div>
+  </details>
+  <details>
+    <summary><span>API routes</span><span class="prd-ref">backend logic</span></summary>
+    <div class="content">
+      <code>POST /api/leetcode</code> — full-framework generation.<br>
+      <code>POST /api/leetcode/chat</code> — guided-mode turn.<br>
+      <code>POST /api/conversations</code> — save.<br>
+      <code>GET /api/conversations</code> — list for sidebar.<br>
+      <code>GET /api/conversations/:id</code> — load one (resume).
+    </div>
+  </details>
+
+  <h2>Data Model</h2>
+  <div class="card">
+    <pre><code>model Conversation {
+  id          String   @id @default(cuid())
+  mode        String   // "full" | "guided"
+  problem     String   // problem number or pasted text
+  language    String
+  stage       String?  // current UMPIRE stage, guided only
+  messages    Json?    // full chat history, guided only
+  response    Json?    // UMPIRE/complexity/concepts/steps, full mode
+  steps       Json?    // visualization steps, either mode
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}</code></pre>
+    <table style="margin-top: 16px;">
+      <tr><th>Where it lives</th><td>Neon Postgres, via Prisma, from API routes only — never queried directly from the browser.</td></tr>
+      <tr><th>How it's updated</th><td>New row on first Save; resuming a guided chat and saving again updates <code>messages</code>, <code>stage</code>, <code>updatedAt</code> on that row.</td></tr>
+      <tr><th>Leave &amp; return</th><td>Unsaved conversations are lost on refresh (in-memory only). Saved ones persist indefinitely and reload fully, including resuming guided chats.</td></tr>
+    </table>
+  </div>
+
+  <h2>File Structure</h2>
+  <pre><code>syntactics/
+├── app/
+│   ├── page.tsx                  # Home: sidebar + mode selector
+│   ├── leetcode/
+│   │   └── page.tsx               # LeetCode Mode: form + response views
+│   └── api/
+│       ├── leetcode/
+│       │   ├── route.ts           # POST: full-framework generation
+│       │   └── chat/route.ts      # POST: guided-mode turn
+│       └── conversations/
+│           ├── route.ts           # GET (list), POST (save)
+│           └── [id]/route.ts      # GET (load one, for resume)
+├── components/
+│   ├── Sidebar.tsx
+│   ├── LeetCodeForm.tsx
+│   ├── FullFrameworkView.tsx
+│   ├── GuidedChat.tsx
+│   └── visualization/
+│       ├── VisualizationStepper.tsx
+│       ├── ArrayView.tsx
+│       ├── LinkedListView.tsx
+│       ├── TreeView.tsx
+│       └── RecursionView.tsx
+├── lib/
+│   ├── gemini.ts                  # Gemini client + prompt construction
+│   └── prisma.ts                  # Prisma client singleton
+├── prisma/
+│   └── schema.prisma
+├── devpost/                       # Devpost learning workspace
+├── .env.local                     # GEMINI_API_KEY, DATABASE_URL (gitignored)
+├── package.json
+└── README.md</code></pre>
+
+  <h2>Stack &amp; External Services</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Next.js 14+ (App Router), TypeScript</h3>
+      <p style="color: var(--muted); font-size: 0.88rem;">One project for pages + API routes — no separate frontend/backend to deploy. <a href="https://nextjs.org/docs" style="color: var(--accent);">docs</a></p>
+    </div>
+    <div class="card">
+      <h3>Gemini API</h3>
+      <p style="color: var(--muted); font-size: 0.88rem;">Free tier — avoids the cost concern that shaped the original choice. Server-side only via <code>GEMINI_API_KEY</code>. <a href="https://ai.google.dev/gemini-api/docs" style="color: var(--accent);">docs</a></p>
+    </div>
+    <div class="card">
+      <h3>Prisma + Neon Postgres</h3>
+      <p style="color: var(--muted); font-size: 0.88rem;">Type-safe queries instead of raw SQL; Neon persists across requests, which a local file wouldn't once deployed. <a href="https://www.prisma.io/docs" style="color: var(--accent);">Prisma docs</a> · <a href="https://neon.tech/docs/introduction" style="color: var(--accent);">Neon docs</a></p>
+    </div>
+    <div class="card">
+      <h3>Vercel</h3>
+      <p style="color: var(--muted); font-size: 0.88rem;">One-click deploy from the GitHub repo; env vars set in project settings. <a href="https://vercel.com/docs" style="color: var(--accent);">docs</a></p>
+    </div>
+  </div>
+  <p style="color: var(--accent-3); font-size: 0.85rem; margin-top: 14px;">⚠ To verify early in the build: the current Gemini TypeScript SDK package/version and its structured-output (JSON mode) syntax — confirm against live docs before wiring the API routes.</p>
+
+  <h2>Important Failure Modes</h2>
+  <div class="card">
+    <ul class="fail-list">
+      <li><span class="what">Non-coding input</span><span class="arrow-sm">&rarr;</span>Gemini classifies first (or the route catches a malformed reply) and shows an error asking for a valid coding problem.</li>
+      <li><span class="what">Unrecognized problem number</span><span class="arrow-sm">&rarr;</span>Gemini still responds with the concepts it can infer, rather than failing outright.</li>
+      <li><span class="what">Gemini reply doesn't match the expected JSON shape</span><span class="arrow-sm">&rarr;</span>the route catches the parse failure; UI shows "couldn't generate a response, try again" instead of crashing.</li>
+    </ul>
+  </div>
+
+  <h2>What Was Simplified and Why</h2>
+  <div class="card">
+    <ul class="simplify-list">
+      <li><span class="built">Stepped JSON + fixed React components</span> instead of AI-generated images or freeform diagrams — Gemini is reliable at filling a known data shape, not at drawing visuals. A handful of hand-built renderers cover the generality the kernel needs.</li>
+      <li><span class="built">One Next.js project</span> instead of a separate frontend + backend service — removes a layer of wiring (CORS, two deploys) while still giving real backend code to write (the API routes).</li>
+      <li><span class="built">A single <code>stage</code> field inferred by Gemini per turn</span> instead of a custom state machine — keeps "AI judges progress" without hand-built stage-detection logic.</li>
+    </ul>
+  </div>
+
+  <h2>Decisions and Open Issues</h2>
+  <details open>
+    <summary><span>The visualization uncertainty — resolved</span></summary>
+    <div class="content">The learner wasn't sure how an AI could generate a visualization for <em>any</em> data structure without image generation. Resolved by splitting "what to show" (Gemini fills a structured <code>steps</code> list) from "how to draw it" (a small fixed set of hand-built components) — the learner's own instinct (boxes/tables over images) was right; this spec gives it a concrete data shape to build against.</div>
+  </details>
+  <details>
+    <summary><span>Database auth clarification</span></summary>
+    <div class="content">Neon's connection string is a server-to-database credential, not user-facing login. The app itself has no accounts or sign-in.</div>
+  </details>
+  <details>
+    <summary><span>Saved conversations are resumable</span></summary>
+    <div class="content">Learner's choice — guided saves include full message history + current stage, so reopening one lets the user keep chatting with full context restored to Gemini.</div>
+  </details>
+  <details>
+    <summary><span>Save stays a per-conversation button</span></summary>
+    <div class="content">Learner considered a global settings toggle, decided the existing opt-in Save action already covers it (<code>prd.md &gt; Saved conversations</code>).</div>
+  </details>
+  <details>
+    <summary><span>Open questions carried from the PRD</span></summary>
+    <div class="content">None remain — the storage-mechanism question (<code>prd.md &gt; Open Questions</code>) is resolved by Neon + Prisma above.</div>
+  </details>
+
+  <footer>devpost/spec.md is canonical — this page is a companion view. Status: draft.</footer>
+</div>
+
+<script>
+  var steps = [
+    {
+      tag: "1 · Open",
+      title: "User opens the app",
+      body: "Next.js renders the sidebar (modes, saved-conversations list from Neon, light/dark toggle) and the LeetCode Mode form."
+    },
+    {
+      tag: "2 · Submit",
+      title: "User fills the form and submits",
+      body: "POST /api/leetcode (full framework) or /api/leetcode/chat (guided) is called. Loading indicator shows while it's in flight."
+    },
+    {
+      tag: "3 · Full framework",
+      title: "One Gemini call, full page renders",
+      body: "The route sends one structured prompt and gets back JSON: UMPIRE stages, complexity + reasoning, concepts, and a steps array. The page renders it all, visualization included as a step-through component."
+    },
+    {
+      tag: "4 · Guided",
+      title: "Back-and-forth chat",
+      body: "The running message history is sent to /api/leetcode/chat on each turn; Gemini's reply includes its next question/hint and which UMPIRE stage it judges the chat to be on. A visualization only generates if asked for mid-chat."
+    },
+    {
+      tag: "5 · Save",
+      title: "User clicks Save",
+      body: "POST /api/conversations writes the conversation (mode, problem, language, full history or response, steps, current stage) to Postgres via Prisma."
+    },
+    {
+      tag: "6 · Return",
+      title: "Reopening a saved conversation",
+      body: "Sidebar's list comes from GET /api/conversations. Clicking a saved guided conversation loads its full message history and the user can keep chatting from where they left off; a saved full-framework conversation reopens as the same rendered page."
+    }
+  ];
+
+  var nav = document.getElementById("stepper-nav");
+  var panels = document.getElementById("stepper-panels");
+
+  steps.forEach(function(step, i) {
+    var btn = document.createElement("button");
+    btn.className = "step-btn" + (i === 0 ? " active" : "");
+    btn.textContent = step.tag;
+    btn.onclick = function() { showStep(i); };
+    nav.appendChild(btn);
+
+    var panel = document.createElement("div");
+    panel.className = "step-panel" + (i === 0 ? " active" : "");
+    panel.innerHTML = '<div class="step-card"><div class="tagline">' + step.tag + '</div><h3>' + step.title + '</h3><p style="color: var(--muted); margin: 0;">' + step.body + '</p></div>';
+    panels.appendChild(panel);
+  });
+
+  function showStep(idx) {
+    var btns = nav.querySelectorAll(".step-btn");
+    var pnls = panels.querySelectorAll(".step-panel");
+    btns.forEach(function(b, i) { b.classList.toggle("active", i === idx); });
+    pnls.forEach(function(p, i) { p.classList.toggle("active", i === idx); });
+  }
+</script>
+</body>
+</html>

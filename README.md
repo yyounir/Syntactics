@@ -25,3 +25,5 @@
 ## Fonts Used
 - [ ] Outfit - Used for regular UI
 - [ ] Source Code Pro Black - Used for code blocks
+
+[//]: # (Current: 2-scope)

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syntactics — Scope: LeetCode Mode</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --panel: #171a23;
+    --panel-2: #1e2230;
+    --border: #2a2f3f;
+    --text: #e8e9ee;
+    --muted: #9aa0b4;
+    --accent: #7c9eff;
+    --accent-2: #67d99a;
+    --accent-3: #ffb15c;
+    --danger: #ff7a7a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 48px 24px 96px; }
+  h1 { font-size: 2rem; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); margin-top: 0; margin-bottom: 40px; font-size: 1.05rem; }
+  h2 {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    margin-top: 48px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+  .kernel {
+    background: linear-gradient(135deg, rgba(124,158,255,0.12), rgba(103,217,154,0.08));
+    border: 1px solid rgba(124,158,255,0.3);
+    border-radius: 12px;
+    padding: 24px;
+    font-size: 1.05rem;
+  }
+
+  /* Diagram */
+  .diagram {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 20px;
+    flex-wrap: wrap;
+  }
+  .node {
+    flex: 1;
+    min-width: 150px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    position: relative;
+  }
+  .node .label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .node .value { font-weight: 600; font-size: 0.95rem; }
+  .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 1.4rem;
+    min-width: 24px;
+  }
+  @media (max-width: 700px) {
+    .diagram { flex-direction: column; }
+    .arrow { transform: rotate(90deg); }
+  }
+
+  /* Reveal / accordion */
+  details {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  summary {
+    cursor: pointer;
+    padding: 14px 18px;
+    font-weight: 600;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: "+";
+    color: var(--muted);
+    font-size: 1.2rem;
+  }
+  details[open] summary::after { content: "−"; }
+  details .content { padding: 0 18px 16px; color: var(--muted); }
+  .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin-right: 8px;
+  }
+  .tag-later { background: rgba(255,177,92,0.15); color: var(--accent-3); }
+  .tag-cut { background: rgba(255,122,122,0.15); color: var(--danger); }
+
+  .boundary-list { list-style: none; padding: 0; margin: 0; }
+  .boundary-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+  }
+  .boundary-list li:last-child { border-bottom: none; }
+  .boundary-list li::before { content: "✓"; color: var(--accent-2); font-weight: bold; }
+
+  .moment {
+    border-left: 3px solid var(--accent-2);
+    padding-left: 16px;
+    margin-top: 16px;
+    font-style: italic;
+    color: var(--text);
+  }
+
+  footer { margin-top: 64px; color: var(--muted); font-size: 0.85rem; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Syntactics — LeetCode Mode</h1>
+  <p class="subtitle">An AI interview-prep tool that walks you through any LeetCode problem using the UMPIRE framework — with generated visualizations of how the data structure actually moves.</p>
+
+  <h2>The Unique Kernel</h2>
+  <div class="kernel">
+    Not an AI that just solves LeetCode problems — an AI that teaches you <em>how to think through</em> one, using UMPIRE (Understand, Plan, Implement, Review, Evaluate), and generates a visualization of the data structure in motion — a recursion tree unfolding, pointers sweeping an array — for <strong>whatever problem you throw at it</strong>. The generality is the point: it's not a canned demo of one problem type.
+  </div>
+
+  <h2>The Core Loop</h2>
+  <div class="diagram">
+    <div class="node">
+      <div class="label">Who</div>
+      <div class="value">CS student prepping for SWE interviews, wants to learn the approach, not just the answer</div>
+    </div>
+    <div class="arrow">&rarr;</div>
+    <div class="node">
+      <div class="label">Does</div>
+      <div class="value">Enters problem # or pastes statement → picks language → picks Guided or Full</div>
+    </div>
+    <div class="arrow">&rarr;</div>
+    <div class="node">
+      <div class="label">Proof</div>
+      <div class="value">UMPIRE breakdown + complexity + a <strong>live-generated</strong> visualization of the structure changing</div>
+    </div>
+  </div>
+
+  <div class="moment">
+    The "oh, that's cool" beat: watching the visualization render for a problem the AI has never seen hardcoded — proof the generation is real, not scripted.
+  </div>
+
+  <h2>Who It's For</h2>
+  <div class="card">
+    CS students who want to become software engineers at top companies but don't know what resources will actually teach them <em>how</em> to approach a coding interview problem — not just show them an answer. (The learner building this is one of them.)
+  </div>
+
+  <h2>Why This Matters to the Learner</h2>
+  <div class="card">
+    Comes from their own frustration figuring out how to actually learn to approach interview problems, rather than copying solutions. Building it is also their vehicle for leveling up on backend development — new territory for them.
+  </div>
+
+  <h2>The POC Boundary</h2>
+  <div class="card">
+    <ul class="boundary-list">
+      <li>LeetCode Mode only — Syntax Mode and Guided Mode are not built this round</li>
+      <li>Input: LeetCode problem number OR pasted problem statement</li>
+      <li>Language selector for the response</li>
+      <li>Toggle: Guided (step-gated UMPIRE reveal) vs. Full Framework (all stages at once)</li>
+      <li>Response includes: UMPIRE breakdown, time/space complexity with reasoning, required concepts, and a generated data-structure visualization</li>
+      <li>Visualization must generalize across problem types (recursion, arrays, graphs, etc.)</li>
+    </ul>
+  </div>
+
+  <h2>Later &amp; Cut</h2>
+  <details>
+    <summary><span><span class="tag tag-later">Later</span>Syntax Mode</span></summary>
+    <div class="content">Paste code, get complexity/structure/style feedback with diagrams. Worth doing — not this round.</div>
+  </details>
+  <details>
+    <summary><span><span class="tag tag-later">Later</span>Guided Mode</span></summary>
+    <div class="content">Concept tutor — ask about any programming concept, AI teaches through code, any language.</div>
+  </details>
+  <details>
+    <summary><span><span class="tag tag-later">Later</span>Sidebar navigation across all three modes</span></summary>
+    <div class="content">The full three-mode product shell. For this PoC, LeetCode Mode stands alone.</div>
+  </details>
+  <details>
+    <summary><span><span class="tag tag-cut">Cut</span>Auto-fetching problems by number from LeetCode itself</span></summary>
+    <div class="content">Scraping/calling LeetCode directly to resolve a problem number into its statement is out of scope for now — pasted problem text is the reliable path for the PoC. Revisit in <code>4-spec</code> if it turns out to be trivial.</div>
+  </details>
+
+  <footer>devpost/scope.md is canonical — this page is a companion view. Status: draft.</footer>
+</div>
+</body>
+</html>

@@ -11,6 +11,12 @@ export async function POST(request: Request) {
 
   try {
     const result = await generateFullFramework(problem, language || "Python");
+    if (!result.isCodingProblem) {
+      return NextResponse.json(
+        { error: "Enter a valid coding problem." },
+        { status: 422 }
+      );
+    }
     return NextResponse.json(result);
   } catch (err) {
     console.error("Full-framework generation failed:", err);

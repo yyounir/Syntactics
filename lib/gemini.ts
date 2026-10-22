@@ -17,6 +17,7 @@ function getClient() {
 }
 
 export interface FullFrameworkResponse {
+  isCodingProblem: boolean;
   umpire: {
     understand: string;
     match: string;
@@ -39,6 +40,7 @@ export interface FullFrameworkResponse {
 const fullFrameworkSchema = {
   type: Type.OBJECT,
   properties: {
+    isCodingProblem: { type: Type.BOOLEAN },
     umpire: {
       type: Type.OBJECT,
       properties: {
@@ -68,7 +70,7 @@ const fullFrameworkSchema = {
     code: { type: Type.STRING },
     steps: visualizationStepsSchema,
   },
-  required: ["umpire", "complexity", "concepts", "code", "steps"],
+  required: ["isCodingProblem", "umpire", "complexity", "concepts", "code", "steps"],
 };
 
 export async function generateFullFramework(
@@ -89,6 +91,8 @@ They want the solution explained in ${language}, using the UMPIRE framework: Und
 In every prose field below (the umpire.* fields and the complexity reasoning fields), wrap significant technical terms in backticks — variable/function names, data structure and algorithm names, and key identifiers from the problem (e.g. \`nums\`, \`complement\`, \`hash map\`, \`num_map[complement]\`) — so they can be highlighted distinctly from the surrounding prose. Don't wrap ordinary words, only genuine code-level terms.
 
 If this is a well-known LeetCode problem number you recognize, use your knowledge of that exact problem. If the number is unfamiliar or doesn't map to a problem you know, still do your best to infer what kind of problem it likely is and respond with the most relevant general concepts you can, rather than refusing.
+
+First, decide "isCodingProblem". Treat any input that is purely a number (or looks like a LeetCode problem number/reference) as "isCodingProblem": true ALWAYS, even if you don't recognize that exact number — infer your best guess at a plausible problem instead. Only set "isCodingProblem": false when the input is pasted text that is clearly not a coding problem at all (e.g. a recipe, a general question, random non-technical text). If false, you may leave the other fields brief/minimal (they're still required by the schema, so use short placeholder values like "N/A" and empty arrays), since the UI will show an error instead of this content.
 
 Return a JSON object with:
 - umpire.understand: restate the problem and constraints in plain language.
@@ -126,6 +130,7 @@ export interface ChatMessage {
 }
 
 export interface GuidedReply {
+  isCodingProblem: boolean;
   reply: string;
   stage: UmpireStage;
   steps?: VisualizationStep[];
@@ -134,11 +139,12 @@ export interface GuidedReply {
 const guidedReplySchema = {
   type: Type.OBJECT,
   properties: {
+    isCodingProblem: { type: Type.BOOLEAN },
     reply: { type: Type.STRING },
     stage: { type: Type.STRING, enum: UMPIRE_STAGE_ORDER },
     steps: visualizationStepsSchema,
   },
-  required: ["reply", "stage"],
+  required: ["isCodingProblem", "reply", "stage"],
 };
 
 export async function generateGuidedReply(
@@ -157,6 +163,8 @@ ${problem}
 """
 
 If this is a well-known LeetCode problem number you recognize, use your knowledge of that exact problem throughout the conversation — don't ask the student to restate it. If the number is unfamiliar or doesn't map to a problem you know, still do your best to infer what kind of problem it likely is and work with the student on the general concepts, rather than refusing or asking them to restate it.
+
+First, decide "isCodingProblem". Treat any input that is purely a number (or looks like a LeetCode problem number/reference) as "isCodingProblem": true ALWAYS, even if you don't recognize that exact number — infer your best guess at a plausible problem instead. Only set "isCodingProblem": false when the input is pasted text that is clearly not a coding problem at all (e.g. a recipe, a general question, random non-technical text). If false, keep "reply" brief (the UI will show an error instead of this content) and leave "stage" as "understand".
 
 Rules for this conversation:
 - Don't just hand over the solution. Ask what the student understands first, respond to their answer, and ask UMPIRE-aligned follow-up questions one stage at a time.

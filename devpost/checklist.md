@@ -59,7 +59,7 @@ Build mode: learn
   Learner check: Reopen a saved guided conversation and send another message — does it pick up where you left off? Rename a saved conversation and confirm the new name sticks around. Delete a saved conversation and confirm it's gone.
   Commit: `Resume, rename, and delete saved conversations from the sidebar`
 
-- [ ] **6. Invalid problem numbers and non-coding input are handled gracefully**
+- [x] **6. Invalid problem numbers and non-coding input are handled gracefully**
   Becomes usable: An unrecognized problem number still returns a useful concepts-only response instead of failing; pasted text that isn't a coding problem shows a clear error message instead of a broken or nonsensical response.
   Why now: These are the two explicit failure-mode behaviors in the PRD/spec; testing them now, against a fully working app, is the cheapest point to confirm the prompt and route actually behave this way.
   PRD ref: `prd.md > States and Boundaries`
@@ -105,3 +105,4 @@ Activity mode: [live app and editor, explicit static fallback, focused alternati
 - Gotcha discovered mid-build: a running dev server keeps its in-memory Prisma Client even after `prisma generate` regenerates it on disk — Turbopack's hot-reload doesn't notice. A schema change always needs a full dev-server restart, not just a save.
 - CSS bug fixed at the learner's request: `body { overflow-x: hidden; }` in `globals.css` was silently breaking the sidebar's `position: sticky` (any non-`visible` overflow on an ancestor, even on an unrelated axis, disables sticky for descendants in some browsers). Removed; the animated background already clips its own overflow independently.
 - Scope additions at the learner's request, both folded into slice 5: an editable `title` per saved conversation (new column + rename UI), and a delete option per saved conversation (`DELETE /api/conversations/:id` + an ✕ button). `prd.md > Saved conversations` and `spec.md` updated for both.
+- Bug fixed during slice 6: the first version of the `isCodingProblem` classification instruction was too strict — Gemini rejected an unrecognized bare problem number (e.g. "99999") as non-coding, contradicting the PRD's "still respond with concepts, don't fail outright" requirement for unrecognized numbers. Tightened the prompt so any bare number is always treated as a coding problem (best-effort inference), reserving the non-coding rejection for clearly non-technical text.

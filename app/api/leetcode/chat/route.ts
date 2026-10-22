@@ -15,6 +15,12 @@ export async function POST(request: Request) {
 
   try {
     const result = await generateGuidedReply(problem, language || "Python", messages || []);
+    if (!result.isCodingProblem) {
+      return NextResponse.json(
+        { error: "Enter a valid coding problem." },
+        { status: 422 }
+      );
+    }
     return NextResponse.json(result);
   } catch (err) {
     console.error("Guided-mode turn failed:", err);

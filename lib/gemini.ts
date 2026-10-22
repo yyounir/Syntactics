@@ -6,7 +6,7 @@ import {
 } from "./visualization";
 import { UMPIRE_STAGE_ORDER, type UmpireStage } from "./umpire";
 
-const MODEL = "gemini-2.5-flash";
+const MODEL = "gemini-3.8-flash";
 
 function getClient() {
   const apiKey = process.env.GEMINI_API_KEY;

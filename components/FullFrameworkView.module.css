@@ -23,6 +23,14 @@
   margin-bottom: 0.2rem;
 }
 
+.stage p {
+  margin: 0 0 0.35rem;
+}
+
+.stage p:last-child {
+  margin-bottom: 0;
+}
+
 .concepts {
   display: flex;
   flex-wrap: wrap;
@@ -51,6 +59,8 @@
   padding: 1rem 1.25rem;
   overflow-x: auto;
   color: var(--accent);
-  font-family: var(--font-source-code-pro), ui-monospace, monospace;
+  font-family: var(--font-source-code-pro, ui-monospace), ui-monospace, monospace;
   font-weight: 900;
+  white-space: pre-wrap;
+  word-break: break-word;
 }

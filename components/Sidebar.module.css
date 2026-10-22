@@ -16,54 +16,14 @@
 }
 
 .brand {
-  font-family: var(--font-source-code-pro), ui-monospace, monospace;
-  font-weight: 700;
-  font-size: 1.15rem;
-  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
   text-decoration: none;
 }
 
-.brandAccent {
-  color: var(--accent);
-}
-
-.brandBracket {
-  color: var(--accent);
-  opacity: 0.8;
-}
-
-.modes {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.mode {
-  padding: 0.6rem 0.8rem;
-  border-radius: var(--radius-sm);
-  font-weight: 700;
-  color: var(--muted);
-  text-decoration: none;
-}
-
-.modeActive {
-  background: var(--accent-dim);
-  color: var(--foreground);
-}
-
-.modeDisabled {
-  opacity: 0.5;
-}
-
-.mode:not(.modeDisabled):hover {
-  background: var(--accent-dim);
-  color: var(--foreground);
-  transform: translateX(2px);
-}
-
-.mode:not(.modeDisabled):active {
-  transform: translateX(2px) scale(0.96);
-  transition-duration: 0.08s;
+.brandLogo {
+  height: 1.5rem;
+  width: auto;
 }
 
 .saved {

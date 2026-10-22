@@ -1,16 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useTheme } from "@/lib/theme-context";
 import styles from "./Sidebar.module.css";
-
-const MODES = [
-  { name: "LeetCode Mode", href: "/leetcode", active: true },
-  { name: "Syntax Mode", href: null, active: false },
-  { name: "Guided Mode", href: null, active: false },
-];
 
 interface SavedConversation {
   id: string;
@@ -21,7 +15,6 @@ interface SavedConversation {
 }
 
 export function Sidebar() {
-  const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
   const [saved, setSaved] = useState<SavedConversation[]>([]);
   const [renamingId, setRenamingId] = useState<string | null>(null);
@@ -60,28 +53,15 @@ export function Sidebar() {
   return (
     <aside className={styles.sidebar}>
       <Link href="/" className={styles.brand}>
-        <span className={styles.brandBracket}>{"</"}</span>
-        <span className={styles.brandAccent}>Syn</span>tactics
-        <span className={styles.brandBracket}>{"_>"}</span>
+        <Image
+          src="/logo.png"
+          alt="Syntactics"
+          width={343}
+          height={48}
+          className={styles.brandLogo}
+          priority
+        />
       </Link>
-
-      <nav className={styles.modes}>
-        {MODES.map((mode) =>
-          mode.active && mode.href ? (
-            <Link
-              key={mode.name}
-              href={mode.href}
-              className={`${styles.mode} ${pathname?.startsWith(mode.href) ? styles.modeActive : ""}`}
-            >
-              {mode.name}
-            </Link>
-          ) : (
-            <span key={mode.name} className={`${styles.mode} ${styles.modeDisabled}`}>
-              {mode.name}
-            </span>
-          )
-        )}
-      </nav>
 
       <div className={styles.saved}>
         <div className={styles.savedHeading}>Saved conversations</div>

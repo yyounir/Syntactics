@@ -5,7 +5,7 @@ import type { ChatMessage } from "@/lib/gemini";
 import type { VisualizationStep } from "@/lib/visualization";
 import type { UmpireStage } from "@/lib/umpire";
 import { UMPIRE_STAGE_ORDER, UMPIRE_STAGE_LABELS } from "@/lib/umpire";
-import { renderWithInlineCode } from "./InlineCode";
+import { renderAsSteps } from "./InlineCode";
 import { VisualizationStepper } from "./visualization/VisualizationStepper";
 import { SaveButton } from "./SaveButton";
 import styles from "./GuidedChat.module.css";
@@ -95,7 +95,7 @@ export function GuidedChat({
             className={`${styles.message} ${message.role === "user" ? styles.messageUser : styles.messageModel}`}
           >
             <span className={styles.messageRole}>{message.role === "user" ? "You" : "Tutor"}</span>
-            <p>{renderWithInlineCode(message.content)}</p>
+            {renderAsSteps(message.content)}
             {message.steps && message.steps.length > 0 && (
               <div className={styles.visualization}>
                 <VisualizationStepper steps={message.steps} />

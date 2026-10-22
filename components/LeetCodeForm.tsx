@@ -11,7 +11,15 @@ export interface LeetCodeFormValues {
   style: ResponseStyle;
 }
 
-const LANGUAGES = ["Python", "JavaScript", "TypeScript", "Java", "C++", "Go"];
+const LANGUAGES = [
+    "Python",
+  "JavaScript",
+  "TypeScript",
+  "Java",
+  "C#","C","PHP","Kotlin","Swift","Rust","Ruby","Scala",
+  "C++",
+  "Go",
+];
 
 export function LeetCodeForm({
   onSubmit,

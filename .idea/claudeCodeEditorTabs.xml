@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ClaudeCodeEditorTabs">
-    <option name="activeSessionId" value="8288f0e5-3dd4-4e21-bb4e-47c99cd82441" />
+    <option name="activeSessionId" value="a0903e75-d0b2-4ca2-99cb-68e6a2f41b21" />
     <option name="openSessionIds">
       <list>
-        <option value="8288f0e5-3dd4-4e21-bb4e-47c99cd82441" />
+        <option value="b7a5e301-e4c1-4117-a0fb-e2d973cce227" />
+        <option value="a0903e75-d0b2-4ca2-99cb-68e6a2f41b21" />
       </list>
     </option>
     <option name="sessionPaths">
       <map>
-        <entry key="8288f0e5-3dd4-4e21-bb4e-47c99cd82441" value="/sessions/ac158b14-63d0-46b6-8d7e-983efe0b879b" />
+        <entry key="a0903e75-d0b2-4ca2-99cb-68e6a2f41b21" value="/sessions/c90fe2c6-71ee-4df3-be84-e23b6620b79d" />
+        <entry key="b7a5e301-e4c1-4117-a0fb-e2d973cce227" value="/sessions/858688ae-a86f-4934-83ba-b7646c81bd6f" />
       </map>
     </option>
     <option name="sessionTitles">
       <map>
-        <entry key="8288f0e5-3dd4-4e21-bb4e-47c99cd82441" value="I think its good, as long as the AI continues to a" />
+        <entry key="a0903e75-d0b2-4ca2-99cb-68e6a2f41b21" value="Sidebar saved conversations and leetcodemode route" />
+        <entry key="b7a5e301-e4c1-4117-a0fb-e2d973cce227" value="Sidebar logo image swap" />
       </map>
     </option>
   </component>

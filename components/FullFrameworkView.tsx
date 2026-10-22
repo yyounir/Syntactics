@@ -1,6 +1,6 @@
 import type { FullFrameworkResponse } from "@/lib/gemini";
 import { UMPIRE_STAGE_ORDER, UMPIRE_STAGE_LABELS } from "@/lib/umpire";
-import { renderWithInlineCode } from "./InlineCode";
+import { renderAsSteps, renderWithInlineCode } from "./InlineCode";
 import { VisualizationStepper } from "./visualization/VisualizationStepper";
 import { SaveButton } from "./SaveButton";
 import styles from "./FullFrameworkView.module.css";
@@ -23,7 +23,7 @@ export function FullFrameworkView({
         {UMPIRE_STAGE_ORDER.map((key) => (
           <div key={key} className={styles.stage}>
             <span className={styles.stageLabel}>{UMPIRE_STAGE_LABELS[key]}</span>
-            <p>{renderWithInlineCode(data.umpire[key])}</p>
+            {renderAsSteps(data.umpire[key])}
           </div>
         ))}
       </section>

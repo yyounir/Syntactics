@@ -38,6 +38,14 @@
   padding: 0.9rem 1.1rem;
 }
 
+.message p {
+  margin: 0 0 0.35rem;
+}
+
+.message p:last-child {
+  margin-bottom: 0;
+}
+
 .messageUser {
   background: var(--accent-dim);
   align-self: flex-end;

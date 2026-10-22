@@ -3,21 +3,26 @@
 import { useState } from "react";
 import { LeetCodeForm, type LeetCodeFormValues } from "@/components/LeetCodeForm";
 import { FullFrameworkView } from "@/components/FullFrameworkView";
+import { GuidedChat } from "@/components/GuidedChat";
 import type { FullFrameworkResponse } from "@/lib/gemini";
 
 export default function LeetCodePage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<FullFrameworkResponse | null>(null);
-  const [guidedNotice, setGuidedNotice] = useState(false);
+  const [guidedSession, setGuidedSession] = useState<{
+    key: number;
+    problem: string;
+    language: string;
+  } | null>(null);
 
   async function handleSubmit(values: LeetCodeFormValues) {
     setError(null);
     setResult(null);
-    setGuidedNotice(false);
+    setGuidedSession(null);
 
     if (values.style === "guided") {
-      setGuidedNotice(true);
+      setGuidedSession({ key: Date.now(), problem: values.problem, language: values.language });
       return;
     }
 
@@ -46,13 +51,19 @@ export default function LeetCodePage() {
       <h1>LeetCode Mode</h1>
       <LeetCodeForm onSubmit={handleSubmit} submitting={submitting} />
 
-      {guidedNotice && (
-        <p>Guided mode arrives in a later build step — pick &ldquo;Full framework&rdquo; for now.</p>
-      )}
       {error && <p>{error}</p>}
       {result && (
         <div style={{ marginTop: "2rem" }}>
           <FullFrameworkView data={result} />
+        </div>
+      )}
+      {guidedSession && (
+        <div style={{ marginTop: "2rem" }}>
+          <GuidedChat
+            key={guidedSession.key}
+            problem={guidedSession.problem}
+            language={guidedSession.language}
+          />
         </div>
       )}
     </div>

@@ -1,25 +1,17 @@
 import type { FullFrameworkResponse } from "@/lib/gemini";
+import { UMPIRE_STAGE_ORDER, UMPIRE_STAGE_LABELS } from "@/lib/umpire";
 import { renderWithInlineCode } from "./InlineCode";
 import { VisualizationStepper } from "./visualization/VisualizationStepper";
 import styles from "./FullFrameworkView.module.css";
-
-const UMPIRE_STAGES: Array<{ key: keyof FullFrameworkResponse["umpire"]; label: string }> = [
-  { key: "understand", label: "Understand" },
-  { key: "match", label: "Match" },
-  { key: "plan", label: "Plan" },
-  { key: "implement", label: "Implement" },
-  { key: "review", label: "Review" },
-  { key: "evaluate", label: "Evaluate" },
-];
 
 export function FullFrameworkView({ data }: { data: FullFrameworkResponse }) {
   return (
     <div className={styles.view}>
       <section className={styles.section}>
         <h2>UMPIRE breakdown</h2>
-        {UMPIRE_STAGES.map(({ key, label }) => (
+        {UMPIRE_STAGE_ORDER.map((key) => (
           <div key={key} className={styles.stage}>
-            <span className={styles.stageLabel}>{label}</span>
+            <span className={styles.stageLabel}>{UMPIRE_STAGE_LABELS[key]}</span>
             <p>{renderWithInlineCode(data.umpire[key])}</p>
           </div>
         ))}

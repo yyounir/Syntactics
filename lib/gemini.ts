@@ -4,6 +4,7 @@ import {
   visualizationStepsSchema,
   type VisualizationStep,
 } from "./visualization";
+import { UMPIRE_STAGE_ORDER, type UmpireStage } from "./umpire";
 
 const MODEL = "gemini-2.5-flash";
 
@@ -117,4 +118,74 @@ ${VISUALIZATION_PROMPT_INSTRUCTIONS}`;
   }
 
   return JSON.parse(text) as FullFrameworkResponse;
+}
+
+export interface ChatMessage {
+  role: "user" | "model";
+  content: string;
+}
+
+export interface GuidedReply {
+  reply: string;
+  stage: UmpireStage;
+  steps?: VisualizationStep[];
+}
+
+const guidedReplySchema = {
+  type: Type.OBJECT,
+  properties: {
+    reply: { type: Type.STRING },
+    stage: { type: Type.STRING, enum: UMPIRE_STAGE_ORDER },
+    steps: visualizationStepsSchema,
+  },
+  required: ["reply", "stage"],
+};
+
+export async function generateGuidedReply(
+  problem: string,
+  language: string,
+  messages: ChatMessage[]
+): Promise<GuidedReply> {
+  const ai = getClient();
+
+  const systemInstruction = `You are a friendly, encouraging interview-prep tutor having an ongoing conversation with a student practicing a coding problem in ${language}, using the UMPIRE framework (Understand, Match, Plan, Implement, Review, Evaluate).
+
+The student gave you this as the problem (it may be a LeetCode problem number, or a pasted problem statement):
+
+"""
+${problem}
+"""
+
+If this is a well-known LeetCode problem number you recognize, use your knowledge of that exact problem throughout the conversation — don't ask the student to restate it. If the number is unfamiliar or doesn't map to a problem you know, still do your best to infer what kind of problem it likely is and work with the student on the general concepts, rather than refusing or asking them to restate it.
+
+Rules for this conversation:
+- Don't just hand over the solution. Ask what the student understands first, respond to their answer, and ask UMPIRE-aligned follow-up questions one stage at a time.
+- Offer hints if the student seems stuck (e.g. picking a data structure/algorithm during the Match stage), without immediately giving the full answer.
+- Keep asking follow-up questions on the current stage until you judge it's understood. At that point, don't silently advance — explicitly ask the student if they feel ready to move on to the next stage (name it, e.g. "Match"), and only advance "stage" once they confirm. If they're not ready or want to stay, keep asking follow-up questions on the current stage instead.
+- If this is the very first turn (no prior conversation), open by asking what the student understands about the problem so far, rather than answering anything yourself.
+- Wrap significant technical terms in backticks in "reply" (e.g. \`nums\`, \`hash map\`), same convention as code highlighting.
+- "stage" must always reflect which UMPIRE stage the conversation is on right now: understand, match, plan, implement, review, or evaluate.
+- If the student's latest message explicitly asks for a visualization, you must include "steps" in this reply — don't defer it to a later turn, even if "reply" also continues the conversation (e.g. a follow-up question). Otherwise, omit "steps" entirely. ${VISUALIZATION_PROMPT_INSTRUCTIONS}`;
+
+  const contents =
+    messages.length > 0
+      ? messages.map((m) => ({ role: m.role, parts: [{ text: m.content }] }))
+      : [{ role: "user" as const, parts: [{ text: "Let's begin." }] }];
+
+  const response = await ai.models.generateContent({
+    model: MODEL,
+    contents,
+    config: {
+      systemInstruction,
+      responseMimeType: "application/json",
+      responseSchema: guidedReplySchema,
+    },
+  });
+
+  const text = response.text;
+  if (!text) {
+    throw new Error("Gemini returned an empty response.");
+  }
+
+  return JSON.parse(text) as GuidedReply;
 }

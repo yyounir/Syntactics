@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Conversation {
+  id        String   @id @default(cuid())
+  mode      String // "full" | "guided"
+  title     String   @default("Untitled conversation") // editable label, defaults to a truncation of `problem` on save
+  problem   String // problem number or pasted text
+  language  String
+  stage     String? // current UMPIRE stage, guided mode only
+  messages  Json? // full chat history, guided mode only
+  response  Json? // UMPIRE/complexity/concepts/steps, full mode only
+  steps     Json? // visualization steps, either mode
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

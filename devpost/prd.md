@@ -62,6 +62,8 @@ Source: `scope.md > The Core Loop`, `scope.md > The Unique Kernel`.
 - As a user who wants to revisit past practice, I want to opt in to saving a conversation so that I can find it again later.
   - [ ] Saving is an opt-in action, not automatic for every session.
   - [ ] Once a conversation is saved, it appears in the sidebar's saved-conversations list.
+  - [ ] Each saved conversation has a title the user can rename, so they can find a specific one later (added during the build at the learner's request — `devpost/checklist.md > Revisions`).
+  - [ ] Each saved conversation can be deleted from the sidebar (added during the build at the learner's request — `devpost/checklist.md > Revisions`).
   - [ ] Storage mechanism (database vs. local storage, etc.) is a `4-spec` decision, not specified here.
 
 ### Appearance

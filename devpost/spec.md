@@ -82,6 +82,8 @@ PRD ref: `scope.md > The Unique Kernel`, `prd.md > Full framework response`.
 - `POST /api/conversations` — save a conversation.
 - `GET /api/conversations` — list saved conversations for the sidebar.
 - `GET /api/conversations/:id` — load one saved conversation's full record (for reopening/resuming).
+- `PATCH /api/conversations/:id` — update a saved conversation's `title`, or its `messages`/`stage` when a resumed guided session is saved again.
+- `DELETE /api/conversations/:id` — delete a saved conversation.
 
 ## Data Model
 
@@ -91,6 +93,7 @@ One table, via Prisma:
 model Conversation {
   id          String   @id @default(cuid())
   mode        String   // "full" | "guided"
+  title       String   // editable label, defaults to a truncation of `problem` on save
   problem     String   // problem number or pasted text
   language    String
   stage       String?  // current UMPIRE stage, guided mode only
@@ -101,6 +104,8 @@ model Conversation {
   updatedAt   DateTime @updatedAt
 }
 ```
+
+`title` added during the build at the learner's request (`devpost/checklist.md > Revisions`) — editable via the sidebar, defaults to a truncation of `problem` so a conversation is never untitled.
 
 - **Where it lives:** Neon Postgres, accessed via Prisma from the API routes only (never directly from the browser).
 - **How it's updated:** a new row is created on first Save; reopening a guided conversation and continuing the chat updates `messages`, `stage`, and `updatedAt` on that same row via a follow-up Save (or auto-update on each new message, learner's call during build — default to updating on Save to keep behavior predictable).

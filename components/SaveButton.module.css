@@ -1,0 +1,37 @@
+.saveRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.saveHint {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.saveButton {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-family: inherit;
+  font-weight: 700;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.saveButton:hover:not(:disabled) {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px -8px var(--accent);
+}
+
+.saveButton:active:not(:disabled) {
+  transform: scale(0.97);
+  transition-duration: 0.08s;
+}
+
+.saveButton:disabled {
+  opacity: 0.7;
+  cursor: default;
+}

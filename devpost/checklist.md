@@ -39,7 +39,7 @@ Build mode: learn
   Learner check: Work through a problem in guided mode as if practicing for an interview — does the questioning feel like it's actually walking you through UMPIRE, with hints when you're stuck?
   Commit: `Add guided-mode UMPIRE chat`
 
-- [ ] **4. You can save a conversation and see it in the sidebar**
+- [x] **4. You can save a conversation and see it in the sidebar**
   Becomes usable: Hitting Save writes the current conversation to a real database, and it appears in the sidebar's saved-conversations list.
   Why now: Introduces the database layer behind one concrete, already-working behavior (save a finished conversation) before resuming is layered on top — the learner's chosen backend/database learning rep (`prd.md > Product Decisions`).
   PRD ref: `prd.md > Saved conversations`
@@ -49,15 +49,15 @@ Build mode: learn
   Learner check: Save a conversation, refresh the page, and confirm it's still listed in the sidebar.
   Commit: `Persist saved conversations to Neon via Prisma`
 
-- [ ] **5. Reopening a saved guided conversation resumes the chat**
-  Becomes usable: Clicking a saved guided conversation in the sidebar loads its full message history back into the chat, and you can keep sending messages from where you left off. Reopening a saved full-framework conversation shows the same rendered read-only page.
-  Why now: Closes out the Core Journey's last step; needs slice 4's storage in place first.
+- [x] **5. Reopening a saved conversation resumes it, and you can rename or delete it**
+  Becomes usable: Clicking a saved guided conversation in the sidebar loads its full message history back into the chat, and you can keep sending messages from where you left off. Reopening a saved full-framework conversation shows the same rendered read-only page. Each saved conversation also has an editable title and can be deleted, so it's easier to manage over time.
+  Why now: Closes out the Core Journey's last step; needs slice 4's storage in place first. Editable titles folded in here at the learner's request (raised during slice 4's check); delete added the same way during this slice's check, since both are "do more with a saved conversation in the sidebar."
   PRD ref: `prd.md > Saved conversations`, `prd.md > The Core Journey` (step 6)
   Spec ref: `spec.md > Components > API routes` (`GET /api/conversations/:id`), `spec.md > Data Model` ("On leave and return")
-  Build: Build `GET /api/conversations/:id`; on sidebar click, load the record and either re-render FullFrameworkView (full mode) or restore GuidedChat's message history and stage and continue sending to `/api/leetcode/chat` (guided mode); on-Save, update the existing row (`messages`, `stage`, `updatedAt`) rather than creating a duplicate.
-  Verify (mechanical): Save a guided conversation, reload the app, click it in the sidebar, confirm the full history loads, send one more message, confirm the AI replies with context from the restored history, then save again and confirm it updates the same row rather than creating a new one.
-  Learner check: Reopen a saved guided conversation and send another message — does it pick up where you left off, like the AI remembers the conversation?
-  Commit: `Resume saved guided conversations from the sidebar`
+  Build: Add a `title` column to the `Conversation` model (migration) and default it to a short truncation of the problem text on save; build `GET /api/conversations/:id`, `PATCH /api/conversations/:id` (updates `title`, and `messages`/`stage`/`updatedAt` for a resumed guided save), and `DELETE /api/conversations/:id`; on sidebar click, load the record and either re-render FullFrameworkView (full mode) or restore GuidedChat's message history and stage and continue sending to `/api/leetcode/chat` (guided mode); add rename and delete affordances to each sidebar entry; the reopened page shows the saved title instead of the generic heading.
+  Verify (mechanical): Save a guided conversation, reload the app, click it in the sidebar, confirm the full history loads, send one more message, confirm the AI replies with context from the restored history, then save again and confirm it updates the same row rather than creating a new one; rename a saved conversation and confirm the new title persists after a reload; delete a saved conversation via curl and confirm it disappears from `GET /api/conversations`.
+  Learner check: Reopen a saved guided conversation and send another message — does it pick up where you left off? Rename a saved conversation and confirm the new name sticks around. Delete a saved conversation and confirm it's gone.
+  Commit: `Resume, rename, and delete saved conversations from the sidebar`
 
 - [ ] **6. Invalid problem numbers and non-coding input are handled gracefully**
   Becomes usable: An unrecognized problem number still returns a useful concepts-only response instead of failing; pasted text that isn't a coding problem shows a clear error message instead of a broken or nonsensical response.
@@ -100,3 +100,8 @@ Activity mode: [live app and editor, explicit static fallback, focused alternati
 - Bug fix during slice 3's learner check: the guided-mode system instruction never told Gemini the input might be a bare LeetCode problem number to recognize — only the full-framework prompt had that instruction. Fixed by mirroring the same "recognize the number, infer concepts if unfamiliar" guidance into `generateGuidedReply`'s system instruction.
 - Prompt refinement at the learner's request: the tutor now explicitly asks "are you ready to move on to [stage]?" and keeps `stage` unchanged until the student confirms, rather than silently advancing once it judges the stage understood.
 - Discovered during testing: `gemini-2.5-flash`'s free tier caps at 20 requests/day. Worth pacing live testing against this limit, and relevant to `6-ship`'s demo recording (don't waste quota on retakes right before recording).
+- Prisma version pinned: `npm install prisma` resolved to an unstable 8.0 release candidate with a completely different, more complex API (`prisma.config.ts`, a compiled "contract," `db.orm.public.Model.where()`). Pinned to the latest stable release (7.10.1) instead, which uses the classic schema + generated-client workflow the spec assumed.
+- Neon connection: using the direct (unpooled) connection string for both migrations and the app's own runtime queries, not the pooled one — the app runs as one long-lived Next.js process (even in production, not deployed as per-request serverless functions for this PoC), so PgBouncer's transaction-mode restrictions don't help here and would only add risk (prepared-statement errors, etc.).
+- Gotcha discovered mid-build: a running dev server keeps its in-memory Prisma Client even after `prisma generate` regenerates it on disk — Turbopack's hot-reload doesn't notice. A schema change always needs a full dev-server restart, not just a save.
+- CSS bug fixed at the learner's request: `body { overflow-x: hidden; }` in `globals.css` was silently breaking the sidebar's `position: sticky` (any non-`visible` overflow on an ancestor, even on an unrelated axis, disables sticky for descendants in some browsers). Removed; the animated background already clips its own overflow independently.
+- Scope additions at the learner's request, both folded into slice 5: an editable `title` per saved conversation (new column + rename UI), and a delete option per saved conversation (`DELETE /api/conversations/:id` + an ✕ button). `prd.md > Saved conversations` and `spec.md` updated for both.

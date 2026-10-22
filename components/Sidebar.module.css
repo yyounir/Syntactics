@@ -20,6 +20,7 @@
   font-weight: 700;
   font-size: 1.15rem;
   letter-spacing: 0.02em;
+  text-decoration: none;
 }
 
 .brandAccent {
@@ -42,6 +43,7 @@
   border-radius: var(--radius-sm);
   font-weight: 700;
   color: var(--muted);
+  text-decoration: none;
 }
 
 .modeActive {
@@ -79,6 +81,88 @@
 .savedEmpty {
   color: var(--muted);
   font-size: 0.85rem;
+}
+
+.savedItemRow {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.savedItem {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.savedItem:hover {
+  background: var(--accent-dim);
+  color: var(--foreground);
+}
+
+.renameButton {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.3rem 0.4rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  opacity: 0;
+}
+
+.savedItemRow:hover .renameButton {
+  opacity: 1;
+}
+
+.renameButton:hover {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.deleteButton {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1;
+  padding: 0.3rem 0.4rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  opacity: 0;
+}
+
+.savedItemRow:hover .deleteButton {
+  opacity: 1;
+}
+
+.deleteButton:hover {
+  color: #e5484d;
+  background: var(--accent-dim);
+}
+
+.renameInput {
+  background: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.5rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.renameInput:focus {
+  outline: none;
 }
 
 .themeToggle {

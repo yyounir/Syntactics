@@ -2,9 +2,20 @@ import type { FullFrameworkResponse } from "@/lib/gemini";
 import { UMPIRE_STAGE_ORDER, UMPIRE_STAGE_LABELS } from "@/lib/umpire";
 import { renderWithInlineCode } from "./InlineCode";
 import { VisualizationStepper } from "./visualization/VisualizationStepper";
+import { SaveButton } from "./SaveButton";
 import styles from "./FullFrameworkView.module.css";
 
-export function FullFrameworkView({ data }: { data: FullFrameworkResponse }) {
+export function FullFrameworkView({
+  data,
+  problem,
+  language,
+  conversationId,
+}: {
+  data: FullFrameworkResponse;
+  problem: string;
+  language: string;
+  conversationId?: string | null;
+}) {
   return (
     <div className={styles.view}>
       <section className={styles.section}>
@@ -51,6 +62,11 @@ export function FullFrameworkView({ data }: { data: FullFrameworkResponse }) {
         <h2>Visualization</h2>
         <VisualizationStepper steps={data.steps} />
       </section>
+
+      <SaveButton
+        conversationId={conversationId}
+        buildPayload={() => ({ mode: "full", problem, language, response: data })}
+      />
     </div>
   );
 }

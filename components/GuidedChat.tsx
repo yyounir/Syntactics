@@ -7,19 +7,35 @@ import type { UmpireStage } from "@/lib/umpire";
 import { UMPIRE_STAGE_ORDER, UMPIRE_STAGE_LABELS } from "@/lib/umpire";
 import { renderWithInlineCode } from "./InlineCode";
 import { VisualizationStepper } from "./visualization/VisualizationStepper";
+import { SaveButton } from "./SaveButton";
 import styles from "./GuidedChat.module.css";
 
-interface DisplayMessage extends ChatMessage {
+export interface DisplayMessage extends ChatMessage {
   steps?: VisualizationStep[];
 }
 
-export function GuidedChat({ problem, language }: { problem: string; language: string }) {
-  const [messages, setMessages] = useState<DisplayMessage[]>([]);
-  const [stage, setStage] = useState<UmpireStage | null>(null);
+export function GuidedChat({
+  problem,
+  language,
+  initialMessages,
+  initialStage,
+  initialConversationId,
+}: {
+  problem: string;
+  language: string;
+  initialMessages?: DisplayMessage[];
+  initialStage?: UmpireStage | null;
+  initialConversationId?: string | null;
+}) {
+  const [messages, setMessages] = useState<DisplayMessage[]>(initialMessages ?? []);
+  const [stage, setStage] = useState<UmpireStage | null>(initialStage ?? null);
+  const [conversationId, setConversationId] = useState<string | null>(
+    initialConversationId ?? null
+  );
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const started = useRef(false);
+  const started = useRef((initialMessages?.length ?? 0) > 0);
 
   async function sendTurn(nextMessages: ChatMessage[]) {
     setLoading(true);
@@ -111,6 +127,15 @@ export function GuidedChat({ problem, language }: { problem: string; language: s
           Send
         </button>
       </div>
+
+      {messages.length > 0 && (
+        <SaveButton
+          key={messages.length}
+          conversationId={conversationId}
+          onSaved={setConversationId}
+          buildPayload={() => ({ mode: "guided", problem, language, stage, messages })}
+        />
+      )}
     </div>
   );
 }

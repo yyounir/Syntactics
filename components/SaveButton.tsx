@@ -42,8 +42,8 @@ export function SaveButton({
       : state === "saving"
         ? "Saving..."
         : state === "error"
-          ? "Couldn't save, try again"
-          : "Save conversation";
+          ? "Couldn't save, try again later"
+          : "Save Chat";
 
   return (
     <div className={styles.saveRow}>

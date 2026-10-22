@@ -72,23 +72,23 @@ Build mode: learn
 ## Hands-on Checkpoints
 
 - [x] Early usable behavior explored — after slice 2 (full-framework response with the generated visualization, the "oh, that's cool" kernel moment); learner confirmed stepping through Previous/Next worked correctly for the array visualization.
-- [ ] Final kick-the-tires exploration and feedback completed
+- [x] Final kick-the-tires exploration and feedback completed — learner explored the full running app freely (core journey, saved/resumed/renamed/deleted conversations, edge-case inputs) and confirmed everything works. One idea raised (building out Syntax Mode and Guided Mode) was explicitly deferred rather than added — see Final Review.
 
 ## Final Review
 
-- [ ] Final review complete — feedback resolved and learner confirms ready to ship
+- [x] Final review complete — feedback resolved and learner confirms ready to ship. During final kick-the-tires exploration, the learner proposed building out Syntax Mode and Guided (concept-tutor) Mode using the same patterns as LeetCode Mode's full-framework/guided flows. Discussed as a real scope expansion (both were explicitly cut in `2-scope`/`3-prd` to fit the hackathon's time budget) rather than a small addition — learner chose to ship the current PoC as-is and treat both modes as future work, not a revision to make now. No changes needed; nothing else came up during exploration.
 
 ## Code Tour and App Map
 
-- [ ] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
-- [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+- [x] Learning activity complete — guided route, connected to the learner's stated backend-learning goal
+- [x] Optional edit and transfer reflection addressed — edit kept and verified; reflection answered (recorded in the ignored learner profile)
+- [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
-Activity and evidence: [what actually happened; real document/test/code references; unfinished work if interrupted]
-Route and stops: [actual paths and symbols; guided stops completed, or reference-only route]
-Edit outcome: [tried/kept/reverted/declined/not applicable; verification if changed]
-Reflection: [offered/answered/declined/already covered — personal answer belongs only in the ignored profile]
-Activity mode: [live app and editor, explicit static fallback, focused alternative, prior practice, or recap]
+Activity and evidence: Traced the Save flow backend-to-front: `components/SaveButton.tsx` (`handleSave`'s `fetch`) → `app/api/conversations/route.ts` (`POST`, `prisma.conversation.create`) → `lib/prisma.ts` (shared client) + `prisma/schema.prisma` (the `Conversation` model, compiled into `prisma/migrations/20261022151110_init/migration.sql`). Learner opted for a full explanation over live click-through; explanation given directly rather than a static fallback (app was running throughout).
+Route and stops: `components/SaveButton.tsx` → `app/api/conversations/route.ts` → `lib/prisma.ts`/`prisma/schema.prisma`. Explained, not live-clicked by the learner.
+Edit outcome: kept — learner changed `components/SaveButton.tsx`'s button label from "Save conversation" to "Save Chat" (and the error label text) directly in their editor; verified via `npm run lint` (clean), committed as `Rename save button label to "Save Chat"`.
+Reflection: answered — personal response recorded in the ignored learner profile (`Learning Moments`), not here.
+Activity mode: live app and editor (explanation-led, not click-through)
 
 ## Revisions
 

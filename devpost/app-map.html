@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Syntactics — App Map</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #0b0f0d;
+    --fg: #eef3f0;
+    --muted: #9ca8a1;
+    --accent: #3ddc74;
+    --border: #233530;
+    --card: #11211a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2rem 1.25rem 4rem;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    line-height: 1.55;
+  }
+  main { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
+  h2 { font-size: 1.15rem; margin-top: 2.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+  .subtitle { color: var(--muted); margin-top: 0; }
+  code, pre {
+    font-family: ui-monospace, "Source Code Pro", Consolas, monospace;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  code { padding: 0.1rem 0.35rem; font-size: 0.92em; }
+  pre { padding: 0.9rem 1rem; overflow-x: auto; }
+  pre code { border: none; padding: 0; background: none; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+  }
+  .stop {
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+    margin: 1rem 0;
+  }
+  .stop-num {
+    flex-shrink: 0;
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #04150a;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+  a { color: var(--accent); }
+  .muted { color: var(--muted); }
+  ul { padding-left: 1.2rem; }
+  .diagram text { fill: var(--fg); font-family: inherit; font-size: 13px; }
+  .diagram .box { fill: var(--card); stroke: var(--border); }
+  .diagram .accentbox { fill: var(--card); stroke: var(--accent); }
+  .diagram .label { fill: var(--muted); font-size: 11px; }
+  .diagram line, .diagram path { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+  details > summary { cursor: pointer; font-weight: 600; margin: 0.5rem 0; }
+  footer { margin-top: 3rem; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Syntactics — App Map</h1>
+  <p class="subtitle">A snapshot of how the app is built, for finding your way back in later.</p>
+
+  <h2>What this app does</h2>
+  <p>
+    Syntactics is an AI interview-prep tool. Its one built mode, <strong>LeetCode Mode</strong>,
+    takes a LeetCode problem (a number or pasted statement), a language, and a response style:
+  </p>
+  <ul>
+    <li><strong>Full framework</strong> — one page with a UMPIRE breakdown (Understand, Match, Plan,
+      Implement, Review, Evaluate), time/space complexity reasoning, the concepts involved, a working
+      code solution, and a step-through visualization of the data structure in motion.</li>
+    <li><strong>Guided</strong> — a back-and-forth chat where the AI questions you through each UMPIRE
+      stage instead of handing over the answer, asking before it advances to the next stage.</li>
+  </ul>
+  <p>
+    Either way, you can save the conversation; it appears in the sidebar, can be renamed or deleted,
+    and reopening it resumes right where you left off (guided chats keep their full history).
+  </p>
+
+  <h2>The big picture</h2>
+  <div class="card">
+    <svg class="diagram" viewBox="0 0 720 260" width="100%" role="img"
+         aria-label="Diagram: clicking Save sends a request from the browser to a Next.js API route, which writes through Prisma to a Neon Postgres database; the full-framework and guided flows separately call the Gemini API and render the result.">
+      <rect class="box" x="10" y="20" width="150" height="60" rx="8" />
+      <text x="85" y="45" text-anchor="middle">Browser</text>
+      <text class="label" x="85" y="62" text-anchor="middle">SaveButton.tsx</text>
+
+      <rect class="accentbox" x="230" y="20" width="170" height="60" rx="8" />
+      <text x="315" y="45" text-anchor="middle">API route</text>
+      <text class="label" x="315" y="62" text-anchor="middle">app/api/conversations</text>
+
+      <rect class="box" x="470" y="20" width="150" height="60" rx="8" />
+      <text x="545" y="45" text-anchor="middle">Prisma Client</text>
+      <text class="label" x="545" y="62" text-anchor="middle">lib/prisma.ts</text>
+
+      <rect class="box" x="470" y="130" width="150" height="60" rx="8" />
+      <text x="545" y="155" text-anchor="middle">Neon Postgres</text>
+      <text class="label" x="545" y="172" text-anchor="middle">Conversation table</text>
+
+      <path d="M160,50 L230,50" marker-end="url(#arrow)" />
+      <path d="M400,50 L470,50" marker-end="url(#arrow)" />
+      <path d="M545,80 L545,130" marker-end="url(#arrow)" />
+
+      <rect class="box" x="10" y="150" width="150" height="60" rx="8" />
+      <text x="85" y="175" text-anchor="middle">Form / Chat</text>
+      <text class="label" x="85" y="192" text-anchor="middle">LeetCodeForm, GuidedChat</text>
+
+      <rect class="accentbox" x="230" y="150" width="170" height="60" rx="8" />
+      <text x="315" y="175" text-anchor="middle">API route</text>
+      <text class="label" x="315" y="192" text-anchor="middle">app/api/leetcode(/chat)</text>
+
+      <rect class="box" x="230" y="230" width="170" height="24" rx="6" />
+      <text x="315" y="246" text-anchor="middle" font-size="11">Google Gemini API</text>
+
+      <path d="M160,180 L230,180" marker-end="url(#arrow)" />
+      <path d="M315,210 L315,230" marker-end="url(#arrow)" />
+
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8 z" fill="var(--muted)" />
+        </marker>
+      </defs>
+    </svg>
+    <p class="muted" style="margin-bottom:0;">
+      Top row: saving a conversation. Bottom row: generating a response. Both paths run server-side code
+      the browser never talks to directly.
+    </p>
+  </div>
+
+  <h2>A real route through the code: clicking Save</h2>
+  <p class="muted">Toured interactively during the build's learning wrap-up.</p>
+
+  <div class="stop">
+    <div class="stop-num">1</div>
+    <div>
+      <strong><code>components/SaveButton.tsx</code></strong> — function <code>handleSave</code><br />
+      <span class="muted">The click handler. It <code>fetch()</code>es <code>/api/conversations</code>
+      (or <code>/api/conversations/&lt;id&gt;</code> with <code>PATCH</code> if a conversation was
+      already saved once). The browser never touches the database directly — it asks the server to.</span>
+    </div>
+  </div>
+
+  <div class="stop">
+    <div class="stop-num">2</div>
+    <div>
+      <strong><code>app/api/conversations/route.ts</code></strong> — function <code>POST</code><br />
+      <span class="muted">Runs only on the server. Reads the request body and calls
+      <code>prisma.conversation.create({ data: {...} })</code>. This is the actual backend logic —
+      the one place that decides what gets written and how.</span>
+    </div>
+  </div>
+
+  <div class="stop">
+    <div class="stop-num">3</div>
+    <div>
+      <strong><code>lib/prisma.ts</code></strong> + <strong><code>prisma/schema.prisma</code></strong><br />
+      <span class="muted"><code>lib/prisma.ts</code> is the one shared database connection every route
+      reuses. <code>schema.prisma</code> is the contract — the <code>Conversation</code> model — that
+      Prisma turned into a real SQL table via <code>npx prisma migrate dev</code> (see
+      <code>prisma/migrations/20261022151110_init/migration.sql</code>). The result: a new row in Neon
+      Postgres, and the conversation now shows up in the sidebar after a refresh.</span>
+    </div>
+  </div>
+
+  <h2>To change this, start here</h2>
+  <ul>
+    <li><strong>Change what Gemini is asked for</strong> (the UMPIRE prompt, the visualization
+      instructions, the coding-problem classifier) → <code>lib/gemini.ts</code> and
+      <code>lib/visualization.ts</code>.</li>
+    <li><strong>Change the saved-conversation shape</strong> (add a field) → edit
+      <code>prisma/schema.prisma</code>, then run <code>npx prisma migrate dev --name &lt;change&gt;</code>
+      (and restart the dev server afterward — a running server keeps its old Prisma Client in memory
+      even after the schema changes on disk).</li>
+    <li><strong>Change the sidebar or saved-conversation UI</strong> →
+      <code>components/Sidebar.tsx</code> (list, rename, delete) and <code>components/SaveButton.tsx</code>
+      (the button itself — this is where the label was changed from "Save conversation" to
+      <code>"Save Chat"</code> as a safe practice edit during this build).</li>
+    <li><strong>Change the visualization rendering</strong> (how a step is drawn) →
+      <code>components/visualization/</code> (one file per data-structure type: <code>ArrayView</code>,
+      <code>LinkedListView</code>, <code>TreeView</code>, <code>RecursionView</code>).</li>
+  </ul>
+
+  <h2>A practice to reuse</h2>
+  <div class="card">
+    <p>
+      Every backend feature in this app follows the same shape: the browser can never be trusted with
+      direct database access, so there's always a server-side <strong>API route</strong> in between that
+      decides what's allowed and forwards the request (see <code>app/api/conversations/route.ts</code>,
+      <code>app/api/leetcode/route.ts</code>, <code>app/api/leetcode/chat/route.ts</code>). When starting
+      a new feature on any future project, the first question worth asking is: <em>what's the client
+      allowed to send, and where's the one server-side place that validates it before it reaches
+      storage?</em> That boundary is what makes a feature "backend" rather than just UI.
+    </p>
+  </div>
+
+  <h2>Running it again</h2>
+  <ol>
+    <li><code>npm install</code></li>
+    <li>Create <code>.env.local</code> with <code>GEMINI_API_KEY</code> (from
+      <a href="https://aistudio.google.com/apikey">Google AI Studio</a>) and <code>DATABASE_URL</code> /
+      <code>DATABASE_URL_UNPOOLED</code> (from a Neon project) — see <code>.env.example</code> for the
+      required names.</li>
+    <li><code>npx prisma generate</code> (and <code>npx prisma migrate dev</code> if the database doesn't
+      have the <code>Conversation</code> table yet).</li>
+    <li><code>npm run dev</code>, then open <code>http://localhost:3000</code> (or whatever port it
+      prints).</li>
+  </ol>
+
+  <footer>
+    <p>
+      Snapshot as of commit <code>c9bc9c8</code> ("Rename save button label to &quot;Save Chat&quot;").
+      The code will keep changing after this — treat this map as a starting point, not a live mirror.
+    </p>
+  </footer>
+</main>
+</body>
+</html>

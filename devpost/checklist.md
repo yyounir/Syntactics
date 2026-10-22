@@ -29,7 +29,7 @@ Build mode: learn
   Learner check: Submit a problem and step through the visualization with Previous/Next — does it actually show the data structure changing the way you'd expect for that problem?
   Commit: `Add generated visualization stepper to full-framework response`
 
-- [ ] **3. Guided mode runs as a back-and-forth UMPIRE conversation**
+- [x] **3. Guided mode runs as a back-and-forth UMPIRE conversation**
   Becomes usable: Choosing "guided" opens a chat where the AI asks what you understand, responds, asks UMPIRE-aligned follow-ups, offers hints, advances stages, and generates a visualization only on request.
   Why now: Completes the second core response style in the Core Journey before adding persistence on top of either.
   PRD ref: `prd.md > Guided response`
@@ -97,3 +97,6 @@ Activity mode: [live app and editor, explicit static fallback, focused alternati
 - Visual direction refined mid-slice-1, from a reference image the learner provided: dark mode flips to white primary text with green as the secondary/accent color (was all-green); sidebar is now a floating rounded card with rounded, animated (hover + press) interactive elements instead of flat text links; a subtle animated background glow was added. `prd.md` and `spec.md > Look and Feel` updated to match.
 - Typography changed at the learner's request: Roboto is now the default UI typeface everywhere except the sidebar logo (kept in Source Code Pro) and displayed code (rendered in Source Code Pro, Black/900 weight) — supersedes the originally-approved single-monospace-typeface-everywhere direction. `prd.md`/`spec.md > Look and Feel` updated.
 - Scope addition at the learner's request: the full-framework response now also includes the actual solution `code` in the chosen language (new Gemini response field + a Code section in `FullFrameworkView`), alongside the UMPIRE breakdown. `prd.md > Full framework response` and `spec.md > Components > FullFrameworkView` updated to include it.
+- Bug fix during slice 3's learner check: the guided-mode system instruction never told Gemini the input might be a bare LeetCode problem number to recognize — only the full-framework prompt had that instruction. Fixed by mirroring the same "recognize the number, infer concepts if unfamiliar" guidance into `generateGuidedReply`'s system instruction.
+- Prompt refinement at the learner's request: the tutor now explicitly asks "are you ready to move on to [stage]?" and keeps `stage` unchanged until the student confirms, rather than silently advancing once it judges the stage understood.
+- Discovered during testing: `gemini-2.5-flash`'s free tier caps at 20 requests/day. Worth pacing live testing against this limit, and relevant to `6-ship`'s demo recording (don't waste quota on retakes right before recording).

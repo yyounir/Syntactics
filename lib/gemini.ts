@@ -1,4 +1,9 @@
 import { GoogleGenAI, Type } from "@google/genai";
+import {
+  VISUALIZATION_PROMPT_INSTRUCTIONS,
+  visualizationStepsSchema,
+  type VisualizationStep,
+} from "./visualization";
 
 const MODEL = "gemini-2.5-flash";
 
@@ -27,6 +32,7 @@ export interface FullFrameworkResponse {
   };
   concepts: string[];
   code: string;
+  steps: VisualizationStep[];
 }
 
 const fullFrameworkSchema = {
@@ -59,8 +65,9 @@ const fullFrameworkSchema = {
       items: { type: Type.STRING },
     },
     code: { type: Type.STRING },
+    steps: visualizationStepsSchema,
   },
-  required: ["umpire", "complexity", "concepts", "code"],
+  required: ["umpire", "complexity", "concepts", "code", "steps"],
 };
 
 export async function generateFullFramework(
@@ -92,7 +99,8 @@ Return a JSON object with:
 - complexity.time / complexity.timeReasoning: Big-O time complexity and step-by-step reasoning for it.
 - complexity.space / complexity.spaceReasoning: Big-O space complexity and step-by-step reasoning for it.
 - concepts: an array of concept/technique/data-structure names required to solve this problem.
-- code: a complete, working solution to the problem written in ${language}, so the user can see exactly how the approach translates into code. Use plain text (no markdown code fences), with normal line breaks and indentation.`;
+- code: a complete, working solution to the problem written in ${language}, so the user can see exactly how the approach translates into code. Use plain text (no markdown code fences), with normal line breaks and indentation.
+${VISUALIZATION_PROMPT_INSTRUCTIONS}`;
 
   const response = await ai.models.generateContent({
     model: MODEL,

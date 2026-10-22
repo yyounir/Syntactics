@@ -9,7 +9,7 @@ Build mode: learn
 
 ## Slices
 
-- [ ] **1. You can submit a problem and get back a real UMPIRE breakdown**
+- [x] **1. You can submit a problem and get back a real UMPIRE breakdown**
   Becomes usable: A running app with the sidebar shell (modes list, placeholder saved-conversations list, light/dark toggle) and the LeetCode Mode form. Submitting a problem number or pasted statement, with full-framework selected, calls Gemini and renders the UMPIRE breakdown, complexity reasoning, and concepts as text. No visualization yet.
   Why now: Proves the single biggest risk first — that Gemini's structured JSON output actually works through this SDK — and gives a real, usable path end to end on slice one, per `spec.md > Stack` ("To verify early in the build"). Bootstrapping (scaffold, dependencies, env vars) lives inside this slice rather than as its own step.
   PRD ref: `prd.md > The Core Journey` (steps 1-4, text portions), `prd.md > Look and Feel`
@@ -19,7 +19,7 @@ Build mode: learn
   Learner check: Open the app, submit a LeetCode problem you know, and say whether the breakdown looks right and whether the dark/light toggle and layout feel like what you pictured.
   Commit: `Scaffold app shell and wire full-framework Gemini response`
 
-- [ ] **2. The visualization steps render and you can step through them**
+- [x] **2. The visualization steps render and you can step through them**
   Becomes usable: The full-framework response now also includes a generated, steppable visualization of the relevant data structure's behavior for that specific problem.
   Why now: This is the unique kernel (`scope.md > The Unique Kernel`) — it has to prove out early, not arrive after everything else is built around it.
   PRD ref: `prd.md > Full framework response`
@@ -71,7 +71,7 @@ Build mode: learn
 
 ## Hands-on Checkpoints
 
-- [ ] Early usable behavior explored — after slice 2 (full-framework response with the generated visualization, the "oh, that's cool" kernel moment)
+- [x] Early usable behavior explored — after slice 2 (full-framework response with the generated visualization, the "oh, that's cool" kernel moment); learner confirmed stepping through Previous/Next worked correctly for the array visualization.
 - [ ] Final kick-the-tires exploration and feedback completed
 
 ## Final Review

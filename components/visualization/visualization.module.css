@@ -1,0 +1,127 @@
+.stepper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.description {
+  min-height: 1.5rem;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.controlButton {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-family: inherit;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.controlButton:hover:not(:disabled) {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px -8px var(--accent);
+}
+
+.controlButton:active:not(:disabled) {
+  transform: scale(0.96);
+  transition-duration: 0.08s;
+}
+
+.controlButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.stepCounter {
+  color: var(--muted);
+}
+
+.stage {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--background) 92%, var(--foreground) 4%);
+  min-height: 140px;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.box {
+  min-width: 2.75rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  font-family: var(--font-source-code-pro), ui-monospace, monospace;
+  font-weight: 900;
+}
+
+.boxHighlight {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.pointerLabel {
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.arrow {
+  color: var(--muted);
+  padding: 0 0.1rem;
+  align-self: center;
+}
+
+.treeRow {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.treeLevels {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.recursionStack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.frame {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.9rem;
+  font-family: var(--font-source-code-pro), ui-monospace, monospace;
+  font-weight: 700;
+}
+
+.frameActive {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+}

@@ -1,5 +1,6 @@
 import type { FullFrameworkResponse } from "@/lib/gemini";
 import { renderWithInlineCode } from "./InlineCode";
+import { VisualizationStepper } from "./visualization/VisualizationStepper";
 import styles from "./FullFrameworkView.module.css";
 
 const UMPIRE_STAGES: Array<{ key: keyof FullFrameworkResponse["umpire"]; label: string }> = [
@@ -52,6 +53,11 @@ export function FullFrameworkView({ data }: { data: FullFrameworkResponse }) {
         <pre className={styles.code}>
           <code>{data.code}</code>
         </pre>
+      </section>
+
+      <section className={styles.section}>
+        <h2>Visualization</h2>
+        <VisualizationStepper steps={data.steps} />
       </section>
     </div>
   );

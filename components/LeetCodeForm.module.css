@@ -1,0 +1,102 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 640px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-weight: 700;
+}
+
+.textarea,
+.select {
+  background: color-mix(in srgb, var(--background) 92%, var(--foreground) 4%);
+  color: var(--accent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.9rem;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.textarea::placeholder {
+  color: var(--muted);
+}
+
+.textarea:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.toggleRow {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.toggleButton {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-family: inherit;
+  font-weight: 700;
+  padding: 0.7rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.toggleButton:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px -8px var(--accent);
+}
+
+.toggleButton:active {
+  transform: scale(0.96);
+  transition-duration: 0.08s;
+}
+
+.toggleButtonActive {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+
+.submit {
+  background: var(--accent-strong);
+  color: #ffffff;
+  border: none;
+  font-family: inherit;
+  font-weight: 700;
+  padding: 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px -8px var(--accent-strong);
+}
+
+.submit:active:not(:disabled) {
+  transform: scale(0.97);
+  transition-duration: 0.08s;
+}
+
+.submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

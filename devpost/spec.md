@@ -47,9 +47,11 @@ PRD ref: `prd.md > The Core Journey`.
 
 Carried forward from `prd.md > Look and Feel` and the project's README font notes — no new design discovery needed.
 
-- Dark mode by default (black background, bright green text); light mode available via sidebar toggle (white background, dark green text).
-- Fixed-width font throughout, including headings, for an IDE/terminal feel — use **Source Code Pro** (the monospace font already chosen in the README) as the single typeface across the app, satisfying the PRD's "fixed-width throughout, including headings" direction. (The README originally split fonts — Outfit for UI, Source Code Pro for code — but the approved PRD direction is fixed-width everywhere, so Source Code Pro is used site-wide rather than introducing a second font family.)
+- Dark mode by default (black background, white primary text, bright green as the secondary/accent color for labels, values, active states, and borders); light mode available via sidebar toggle (white background, dark primary text, green accent).
+- **Roboto** is the default UI typeface (body text, headings, labels, buttons) across the app, except the Syntactics logo in the sidebar, which keeps **Source Code Pro** for its distinct wordmark treatment. Generated/shown code (the full-framework solution code, and any code-like content) renders in **Source Code Pro, Black (900) weight**, to visually separate "code" from "prose" — refined from the originally-approved single-monospace-typeface direction at the learner's request during the build (`devpost/checklist.md > Revisions`).
 - Bold typography for headings.
+- Sidebar is a floating rounded card inset from the viewport edges; mode links, toggle buttons, and the submit button are rounded rectangles with hover/focus animation (subtle lift + glow) rather than flat clickable text — refined from a reference image the learner provided during the build (`devpost/checklist.md > Revisions`).
+- A subtle animated background (soft glow, low-opacity) runs behind the app shell for an immersive feel, kept dim enough not to compete with foreground text.
 - Tone: clean, developer-friendly, chatbot-style — like a familiar AI coding assistant interface (`scope.md > Inspiration & Identity`).
 
 ## Components
@@ -63,7 +65,7 @@ Problem number/text input, language selector, guided/full-framework toggle, subm
 PRD ref: `prd.md > Input and submission`.
 
 ### FullFrameworkView
-Renders UMPIRE breakdown, complexity + reasoning, concepts, and the `VisualizationStepper`, from one Gemini response.
+Renders UMPIRE breakdown, complexity + reasoning, concepts, the solution code (in the chosen language), and the `VisualizationStepper`, from one Gemini response.
 PRD ref: `prd.md > Full framework response`.
 
 ### GuidedChat

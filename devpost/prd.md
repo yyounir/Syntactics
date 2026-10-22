@@ -29,8 +29,9 @@ Source: `scope.md > The Core Loop`, `scope.md > The Unique Kernel`.
 - Dark mode by default; user can switch to light mode via the sidebar toggle.
 - Fixed-width (monospace) font throughout, including headings, for a developer/IDE-like feel.
 - Bold typography for headings.
-- Dark mode: black background, bright green text (terminal aesthetic).
-- Light mode: white background, dark green text.
+- Dark mode: black background, white primary text, bright green used as the secondary/accent color (active states, labels, values, borders) — refined from an updated reference image during the build (`devpost/checklist.md > Revisions`).
+- Light mode: white background, dark text, green accent, mirroring the dark-mode relationship.
+- Sidebar reads as a floating rounded card (inset from the edges, rounded corners) rather than an edge-to-edge panel; interactive elements (mode links, toggle buttons, submit button) are rounded and animate on hover/focus for an immersive, friendly feel.
 - Overall identity: clean, developer-friendly, chatbot-style interface familiar to anyone who's used an AI coding assistant (`scope.md > Inspiration & Identity`).
 
 ## Features and Behavior
@@ -42,11 +43,12 @@ Source: `scope.md > The Core Loop`, `scope.md > The Unique Kernel`.
 - While the AI generates a response, a loading indicator is shown.
 
 ### Full framework response
-- As a user who wants the whole picture at once, I want all UMPIRE stages, complexity, concepts, and a visualization on one page so that I can review a problem quickly.
+- As a user who wants the whole picture at once, I want all UMPIRE stages, complexity, concepts, a visualization, and the actual solution code on one page so that I can review a problem quickly.
   - [ ] Response page shows UMPIRE stages in order (Understand, Match, Plan, Implement, Review, Evaluate).
   - [ ] Response includes time and space complexity with line-by-line or step-by-step reasoning.
   - [ ] Response lists the concepts/techniques/data structures required.
   - [ ] Response includes a generated visualization specific to the submitted problem (not a hardcoded example) showing the relevant data structure's behavior (e.g. recursion tree unfolding, pointer movement).
+  - [ ] Response includes the actual solution code in the chosen language, shown alongside the UMPIRE breakdown so the user can see how the approach translates into code (added during the build at the learner's request — `devpost/checklist.md > Revisions`).
 
 ### Guided response
 - As a user practicing for an interview, I want the AI to question me through each UMPIRE stage so that I build the habit of reasoning before being shown the answer.
@@ -86,7 +88,7 @@ Source: `scope.md > The Core Loop`, `scope.md > The Unique Kernel`.
 - Sidebar with LeetCode Mode (active), Syntax Mode and Guided Mode (grayed out), saved-conversations list, and light/dark toggle.
 - LeetCode Mode input form: problem number or pasted statement, language selector, guided/full-framework toggle.
 - Loading indicator during generation.
-- Full-framework response: UMPIRE breakdown, time/space complexity with reasoning, concepts/techniques required, and a generated visualization specific to the submitted problem.
+- Full-framework response: UMPIRE breakdown, time/space complexity with reasoning, concepts/techniques required, the actual solution code in the chosen language, and a generated visualization specific to the submitted problem.
 - Guided-mode conversational flow through all six UMPIRE stages, with follow-up questions, hints, and on-request visualization.
 - Opt-in conversation saving, surfaced in the sidebar list.
 - Light/dark mode toggle, styled per **Look and Feel**.

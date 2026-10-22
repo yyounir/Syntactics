@@ -1,0 +1,105 @@
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  padding: 1.5rem 1.25rem;
+  margin: 1.25rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--background) 85%, var(--foreground) 4%);
+  position: sticky;
+  top: 1.25rem;
+  height: calc(100vh - 2.5rem);
+  overflow-y: auto;
+}
+
+.brand {
+  font-family: var(--font-source-code-pro), ui-monospace, monospace;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+}
+
+.brandAccent {
+  color: var(--accent);
+}
+
+.brandBracket {
+  color: var(--accent);
+  opacity: 0.8;
+}
+
+.modes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.mode {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.modeActive {
+  background: var(--accent-dim);
+  color: var(--foreground);
+}
+
+.modeDisabled {
+  opacity: 0.5;
+}
+
+.mode:not(.modeDisabled):hover {
+  background: var(--accent-dim);
+  color: var(--foreground);
+  transform: translateX(2px);
+}
+
+.mode:not(.modeDisabled):active {
+  transform: translateX(2px) scale(0.96);
+  transition-duration: 0.08s;
+}
+
+.saved {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.savedHeading {
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.savedEmpty {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.themeToggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  font-family: inherit;
+  font-weight: 700;
+  padding: 0.6rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.themeToggle:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px -8px var(--accent);
+}
+
+.themeToggle:active {
+  transform: scale(0.96);
+  transition-duration: 0.08s;
+}

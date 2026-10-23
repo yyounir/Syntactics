@@ -33,9 +33,29 @@
 }
 
 .message {
+  position: relative;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 0.9rem 1.1rem;
+  padding: 0.9rem 2.2rem 0.9rem 1.1rem;
+}
+
+.deleteButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.6rem;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.1rem 0.3rem;
+  border-radius: var(--radius-sm);
+}
+
+.deleteButton:hover {
+  color: var(--accent);
+  background: var(--accent-dim);
 }
 
 .message p {

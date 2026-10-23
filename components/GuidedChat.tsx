@@ -78,6 +78,10 @@ export function GuidedChat({
     sendTurn(updated);
   }
 
+  function handleDelete(index: number) {
+    setMessages((prev) => prev.filter((_, i) => i !== index));
+  }
+
   return (
     <div className={styles.chat}>
       <div className={styles.stageRow}>
@@ -94,6 +98,14 @@ export function GuidedChat({
             key={index}
             className={`${styles.message} ${message.role === "user" ? styles.messageUser : styles.messageModel}`}
           >
+            <button
+              type="button"
+              className={styles.deleteButton}
+              onClick={() => handleDelete(index)}
+              aria-label="Delete message"
+            >
+              ×
+            </button>
             <span className={styles.messageRole}>{message.role === "user" ? "You" : "Tutor"}</span>
             {renderAsSteps(message.content)}
             {message.steps && message.steps.length > 0 && (

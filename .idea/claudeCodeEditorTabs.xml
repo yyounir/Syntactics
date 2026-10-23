@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ClaudeCodeEditorTabs">
-    <option name="activeSessionId" value="a0903e75-d0b2-4ca2-99cb-68e6a2f41b21" />
+    <option name="activeSessionId" value="b9aa9ecc-2447-40e9-879d-2986be0e548a" />
     <option name="openSessionIds">
       <list>
-        <option value="b7a5e301-e4c1-4117-a0fb-e2d973cce227" />
         <option value="a0903e75-d0b2-4ca2-99cb-68e6a2f41b21" />
+        <option value="9a652205-97ff-4313-a1de-fd29b6448798" />
+        <option value="b9aa9ecc-2447-40e9-879d-2986be0e548a" />
       </list>
     </option>
     <option name="sessionPaths">
       <map>
+        <entry key="9a652205-97ff-4313-a1de-fd29b6448798" value="/sessions/2895f93b-c1dc-44d6-b587-f90aee5724aa" />
         <entry key="a0903e75-d0b2-4ca2-99cb-68e6a2f41b21" value="/sessions/c90fe2c6-71ee-4df3-be84-e23b6620b79d" />
-        <entry key="b7a5e301-e4c1-4117-a0fb-e2d973cce227" value="/sessions/be519083-9d3e-47ad-b732-cbdae9bcde13" />
+        <entry key="b9aa9ecc-2447-40e9-879d-2986be0e548a" value="/sessions/new" />
       </map>
     </option>
     <option name="sessionTitles">
       <map>
+        <entry key="9a652205-97ff-4313-a1de-fd29b6448798" value="i think for 3, you will need to fix this error" />
         <entry key="a0903e75-d0b2-4ca2-99cb-68e6a2f41b21" value="Sidebar saved conversations and leetcodemode route" />
-        <entry key="b7a5e301-e4c1-4117-a0fb-e2d973cce227" value="AI response 502 error" />
+        <entry key="b9aa9ecc-2447-40e9-879d-2986be0e548a" value="Claude Code" />
       </map>
     </option>
   </component>
